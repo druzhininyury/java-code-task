@@ -1,4 +1,4 @@
-package com.github.druzhininyury.TestTask;
+package com.github.druzhininyury.testtask;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
