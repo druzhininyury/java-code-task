@@ -27,7 +27,7 @@ public class Operation {
 
     @JoinColumn(name = "wallet_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private WalletBalance walletBalance;
+    private Wallet wallet;
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)

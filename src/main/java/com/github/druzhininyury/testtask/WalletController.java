@@ -4,7 +4,7 @@ import com.github.druzhininyury.testtask.dto.OperationDto;
 import com.github.druzhininyury.testtask.dto.WalletBalanceDto;
 import com.github.druzhininyury.testtask.mapping.OperationMapper;
 import com.github.druzhininyury.testtask.mapping.WalletMapper;
-import com.github.druzhininyury.testtask.model.WalletBalance;
+import com.github.druzhininyury.testtask.model.Wallet;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,17 +29,17 @@ public class WalletController {
     @ResponseStatus(HttpStatus.OK)
     public WalletBalanceDto processOperation(@RequestBody @Valid OperationDto operationDto) {
         log.info("Got POST request: " + operationDto);
-        WalletBalance walletBalance = walletService.processOperation(operationMapper.toOperation(operationDto),
+        Wallet wallet = walletService.processOperation(operationMapper.toOperation(operationDto),
                                                                      operationDto.getWalletId());
-        return walletMapper.toWalletBalanceDto(walletBalance);
+        return walletMapper.toWalletBalanceDto(wallet);
     }
 
     @GetMapping("/api/v1/wallets/{walletId}")
     @ResponseStatus(HttpStatus.OK)
     public WalletBalanceDto getBalance(@PathVariable long walletId) {
         log.info("Got GET request for walletId = " + walletId);
-        WalletBalance walletBalance = walletService.getBalance(walletId);
-        return walletMapper.toWalletBalanceDto(walletBalance);
+        Wallet wallet = walletService.getBalance(walletId);
+        return walletMapper.toWalletBalanceDto(wallet);
     }
 
     // endpoint for external testing
@@ -47,8 +47,8 @@ public class WalletController {
     @ResponseStatus(HttpStatus.CREATED)
     public WalletBalanceDto addWallet() {
         log.info("Got POST request for adding wallet.");
-        WalletBalance walletBalance = walletService.addWallet();
-        return walletMapper.toWalletBalanceDto(walletBalance);
+        Wallet wallet = walletService.addWallet();
+        return walletMapper.toWalletBalanceDto(wallet);
     }
 
     // endpoint for external testing
@@ -56,8 +56,8 @@ public class WalletController {
     @ResponseStatus(HttpStatus.OK)
     public List<WalletBalanceDto> getAllWallets() {
         log.info("Got GET request for getting all wallets.");
-        List<WalletBalance> walletsBalances = walletService.getAllWallets();
-        return walletMapper.toWalletBalanceDto(walletsBalances);
+        List<Wallet> wallets = walletService.getAllWallets();
+        return walletMapper.toWalletBalanceDto(wallets);
     }
 
 }

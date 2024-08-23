@@ -12,12 +12,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "wallets")
-public class WalletBalance {
+public class Wallet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long walletId;
+    private Long id;
 
     @Column(name = "balance", nullable = false)
     private Long balance = 0L;

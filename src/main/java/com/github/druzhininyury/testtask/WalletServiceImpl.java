@@ -3,7 +3,7 @@ package com.github.druzhininyury.testtask;
 import com.github.druzhininyury.testtask.exception.EntityNotFoundException;
 import com.github.druzhininyury.testtask.exception.IllegalOperationException;
 import com.github.druzhininyury.testtask.model.Operation;
-import com.github.druzhininyury.testtask.model.WalletBalance;
+import com.github.druzhininyury.testtask.model.Wallet;
 import com.github.druzhininyury.testtask.repository.OperationRepository;
 import com.github.druzhininyury.testtask.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,48 +26,48 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
-    public WalletBalance processOperation(Operation operation, long walletId) {
-        Optional<WalletBalance> walletBalanceContainer = walletRepository.findById(walletId);
+    public Wallet processOperation(Operation operation, long walletId) {
+        Optional<Wallet> walletBalanceContainer = walletRepository.findById(walletId);
         if (walletBalanceContainer.isEmpty()) {
             throw new EntityNotFoundException("Wallet with id=" + walletId + " not found.");
         }
-        operation.setWalletBalance(walletBalanceContainer.get());
+        operation.setWallet(walletBalanceContainer.get());
 
         return switch (operation.getType()) {
             case DEPOSIT -> {
-                if (Long.MAX_VALUE - operation.getWalletBalance().getBalance() < operation.getAmount()) {
+                if (Long.MAX_VALUE - operation.getWallet().getBalance() < operation.getAmount()) {
                     throw new IllegalOperationException("Can't deposit because reached max value for balance.");
                 }
 
-                operation.getWalletBalance().setBalance(operation.getWalletBalance().getBalance() + operation.getAmount());
+                operation.getWallet().setBalance(operation.getWallet().getBalance() + operation.getAmount());
 
-                WalletBalance walletBalance = walletRepository.save(operation.getWalletBalance());
+                Wallet wallet = walletRepository.save(operation.getWallet());
                 operation = operationRepository.save(operation);
 
                 log.info("Processed operation: " + operation);
 
-                yield walletBalance;
+                yield wallet;
             }
             case WITHDRAW -> {
-                if (operation.getWalletBalance().getBalance() < operation.getAmount()) {
+                if (operation.getWallet().getBalance() < operation.getAmount()) {
                     throw new IllegalOperationException("Can't withdraw more than exists on balance.");
                 }
 
-                operation.getWalletBalance().setBalance(operation.getWalletBalance().getBalance() - operation.getAmount());
+                operation.getWallet().setBalance(operation.getWallet().getBalance() - operation.getAmount());
 
-                WalletBalance walletBalance = walletRepository.save(operation.getWalletBalance());
+                Wallet wallet = walletRepository.save(operation.getWallet());
                 operation = operationRepository.save(operation);
 
                 log.info("Processed operation: " + operation);
 
-                yield walletBalance;
+                yield wallet;
             }
         };
     }
 
     @Override
-    public WalletBalance getBalance(long walletId) {
-        Optional<WalletBalance> walletBalanceContainer = walletRepository.findById(walletId);
+    public Wallet getBalance(long walletId) {
+        Optional<Wallet> walletBalanceContainer = walletRepository.findById(walletId);
         if (walletBalanceContainer.isEmpty()) {
             throw new EntityNotFoundException("Wallet with id=" + walletId + " not found.");
         }
@@ -79,20 +79,20 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
-    public WalletBalance addWallet() {
-        WalletBalance walletBalance = walletRepository.save(new WalletBalance());
+    public Wallet addWallet() {
+        Wallet wallet = walletRepository.save(new Wallet());
 
-        log.info("Added new wallet with id=" + walletBalance.getWalletId());
+        log.info("Added new wallet with id=" + wallet.getId());
 
-        return walletBalance;
+        return wallet;
     }
 
     @Override
-    public List<WalletBalance> getAllWallets() {
-        List<WalletBalance> walletsBalances = walletRepository.findAll();
+    public List<Wallet> getAllWallets() {
+        List<Wallet> wallets = walletRepository.findAll();
 
         log.info("Got balanced for all wallets.");
 
-        return walletsBalances;
+        return wallets;
     }
 }
