@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@EqualsAndHashCode
 @ToString
 @Entity
 @Table(name = "operations")
@@ -37,6 +39,7 @@ public class Operation {
     private Long amount;
 
     @Column(name = "created_on", nullable = false)
+    @Builder.Default
     private LocalDateTime createdOn = LocalDateTime.now();
 
 }

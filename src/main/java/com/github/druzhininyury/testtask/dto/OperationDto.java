@@ -4,15 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.druzhininyury.testtask.model.Operation;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
+@Builder
 public class OperationDto {
 
 
