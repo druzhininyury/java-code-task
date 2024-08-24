@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  wallet-service:
+    build: .
+    image: wallet-server
+    container_name: wallet-server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - wallet-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://wallet-db:5432/walletdb
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+
+  wallet-db:
+    image: postgres:16-alpine
+    container_name: wallet-server-db
+    environment:
+      - POSTGRES_DB=walletdb
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
