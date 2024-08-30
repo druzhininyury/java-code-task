@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class WalletServiceImpl implements WalletService {
     private final OperationRepository operationRepository;
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public Wallet processOperation(Operation operation, long walletId) {
         Optional<Wallet> walletBalanceContainer = walletRepository.findById(walletId);
         if (walletBalanceContainer.isEmpty()) {
